@@ -1,6 +1,6 @@
 ---
 title: "DocWebsite"
-author: "JorgeCornejo"
+author: "Jorge Cornejo"
 date: "2024-10-08"
 output:
   md_document: default
