@@ -373,7 +373,7 @@ No todas las funciones tienen (o requieren) argumentos:
 
     date()
 
-    ## [1] "Wed Oct  9 17:02:07 2024"
+    ## [1] "Wed Oct  9 17:06:33 2024"
 
 ## Leyendo un archivo de datos a R
 
@@ -590,9 +590,6 @@ RMarkdown.
 
 En este capítulo veremos:
 
--   ¿Por qué **git** es útil para análisis reproducibles?
--   ¿Cómo usar **git** para registrar los cambios que se hacen en el
-    tiempo?
 -   ¿Cómo usar **GitHub** para colaborar?
 -   ¿Cómo estructurar los “*commits*” para que los cambios sean claros
     para otros?
@@ -645,291 +642,20 @@ una versión exacta de los datos, código y texto, por ejemplo, de un
 manuscrito que fue enviado para ser publicado, este puede ser el caso de
 la etiqueda `R2` en la figura @ref(fig:figVersiones2).
 
-## Control de versiones y colaboración usando Git and GitHub
-
-Es importante hacer la distinción entre **git** y **GitHub**.
-
--   **git**: Software para el control de versiones que monitorea los
-    archivos de un directorio (repositorio).
-    -   git crea el historial de versiones del repositorio.
--   **GitHub**: Sitio web que permite a los usuarios almacenar sus
-    repositorios git y compartirlos con otros usuarios.
-
-<img src="images/6.3_vc-local-github.png" alt="Diferencia entre git y GitHub." width="60%" />
-<p class="caption">
-Diferencia entre git y GitHub.
-</p>
-
-## Veamos un repositorio de GitHub
-
-La captura de pantalla en la figura @ref(fig:webGitHub) muestra una
-copia de un repositorio almacenado en GitHub, con el listado de archivos
-y directorios, indicando cuando fueron modificados, incluyendo
-información acerca de quien hizo los cambios y una pequeña descripción
-de los cambios realizados.
-
-<img src="images/6.4_ss3sim-github.png" alt="Captura de pantalla de un repositorio en GitHub." width="100%" />
-<p class="caption">
-Captura de pantalla de un repositorio en GitHub.
-</p>
-
-Si nos metemos en los “commits” del repositorio
-(fig. @ref(fig:githubCommits)), podemos ver la historia de los cambios
-que se le han realizado. Por ejemplo, se ve que `kellijohnson` y
-`seananderson` hicieron algunos cambios durante junio y julio:
-
-<img src="images/6.5_ss3sim-commits.png" alt="Captura de pantalla de los Commits de un repositorio en GitHub." width="100%" />
-<p class="caption">
-Captura de pantalla de los Commits de un repositorio en GitHub.
-</p>
-
-Si entramos ahora a ver los cambios realizados el 13 de julio
-(fig. @ref(fig:githubDiferencias)), podemos saber exactamente cuales
-fueron los cambios realizados a cada archivo:
-
-<img src="images/6.6_ss3sim-diff.png" alt="Captura de pantalla donde se presentan las diferencias entre dos versiones alojadas en un repositorio de GitHub." width="100%" />
-<p class="caption">
-Captura de pantalla donde se presentan las diferencias entre dos
-versiones alojadas en un repositorio de GitHub.
-</p>
-
-Monitorear estas modificaciones, como se relacionan a cada una de las
-versiones de un software en particular y a los archivos es exactamente
-para lo que fueron diseñados git y GitHub. Vamos a mostrar como estos
-sistemas pueden ser realmente efectivos para monitorear las versiones de
-códigos científicos, figuras y manuscritos y de esta forma tener flujos
-de trabajo reproducibles.
-
-## El ciclo de vida de Git
-
-Como usuario de git usted tiene que entender algunos conceptos básicos
-asociados a los sets de cambios con versiones y como estos son
-almacenados y se mueven a través del repositorio. Cualquier repositorio
-de git puede ser clonado, de esta forma existe en forma local y remota.
-Pero cada uno de estos repositorios clonados son una copia simple de
-todos los archivos y del historial de los cambios que se han realizado,
-lo que son almacenados en un forma repositio git particular. Para
-nuestros propósitos, tenemos que considerar un repositorio de git
-simplemente como un directorio que contiene adicionalmente un set de
-metadatos relacionado las versiones.
-
-En un directorio local donde git fue habilitado, el directorio contiene
-la versión actual de todos los archivos del repositorio. Estos archivos
-de trabajo están unidos a un directorio escondido que contiene el
-‘Repositorio local’, el que a su vez contiene todos los otros cambios
-que se han realizado a los archivos y los metadatos sobre las versiones.
-
-De esta forma, cuando se está usando git para trabajar con archivos, se
-pueden usar los comandos de git para indicar específicamente que cambios
-a los archivos de trabajo deben ser definidos para las versiones (usando
-el comando `git add`) y cuando grabar estos cambios como una versión en
-el repositorio local (usando el comando `git commit`).
-
-Los demás conceptos se relacionan a la sincronización de los cambios en
-el repositorio local a un repositorio remoto. El comando `git push` se
-usar para enviar los cambios realizados en forma local a un repositorio
-remoto (posiblemente en GitHub) y el comando `git pull` es usado para
-traer los cambios del repositorio remoto y unirlos al repositorio local.
-
-<img src="images/6.7_git-flowchart.png" alt="Diagrama de flujo del ciclo de vida de git." width="70%" />
-<p class="caption">
-Diagrama de flujo del ciclo de vida de git.
-</p>
-
--   `git clone`: Copia todo el repositorio remoto a uno local.
--   `git add` (stage): Notifica a git de monitorear un set particular de
-    cambios.
--   `git commit`: Almacena los cambios realizados como una versión.
--   `git pull`: Combina los cambios de un repositorio remoto a nuestro
-    repositorio local.
--   `git push`: Copia los cambios de nuestro repositorio local al
-    repositorio remoto.
--   `git status`: Determina el estado de los archivos en el repositorio
-    local.
--   `git log`: Imprime el historial de cambios en el repositorio.
-
-Estos siete comandos son la mayoría de los comando que va a necesitar
-para utilizar git en forma exitosa. Pero todo esto es demasiado
-abstracto, mejor exploremos estos conceptos utilizando ejemplos reales.
-
-## Cree un repositorio remoto en GitHub
-
-Empecemos creando un repositorio en GitHub, luego editaremos algunos
-archivos.
-
--   Ingrese al sitio [GitHub](https://github.com).
--   Clic en el botón de repositorio nuevo (New repository).
--   Nómbrelo como `sasap-test`.
--   Cree un archivo README.md.
--   Defina la licencia a Apache 2.0.
-
-<img src="images/6.8_new-repo-github.png" alt="Captura de pantalla de la creación de un repositorio nuevo en GitHub." width="100%" />
-<p class="caption">
-Captura de pantalla de la creación de un repositorio nuevo en GitHub.
-</p>
-
-¡Usted acaba de crear su primer repositorio! Este repositorio fue creado
-con un par de archivos que GitHub hace por usted, son los archivos
-README.md, LICENSE y .gitignore.
-
-<img src="images/6.9_sasap-test-repo.png" alt="Captura de pantalla con el repositorio recién creado llamado sasap-test." width="100%" />
-<p class="caption">
-Captura de pantalla con el repositorio recién creado llamado sasap-test.
-</p>
-
-Para hacer cambios menores a archivos de texto se puede utilizar la
-interfase web de GitHub. Navegue al archivo `README.md` en el listado de
-archivos y habilite la edición haciendo clic en el icono del *lápiz*.
-Este es un archivo normal con el formado Markdown, ahora se puede
-editar, agregando o removiendo texto. Cuando haya terminado, incluya un
-mensaje de commit y luego haga clic en el botón `Commit changes`.
-
-<img src="images/6.10_sasap-test-edit.png" alt="Captura de pantalla con la interfase web de GitHub para la edición de documentos de texto." width="100%" />
-<p class="caption">
-Captura de pantalla con la interfase web de GitHub para la edición de
-documentos de texto.
-</p>
-
-<img src="images/6.11_sasap-test-commit.png" alt="Captura de pantalla con la interfase web de GitHub para la confirmar de los cambios realizados al documento de texto (commit changes)." width="100%" />
-<p class="caption">
-Captura de pantalla con la interfase web de GitHub para la confirmar de
-los cambios realizados al documento de texto (commit changes).
-</p>
-
-Felicitaciones, ahora usted acaba de confirmar (commit) los cambios,
-ahora es el autor de la primera versión de este archivo. Si navega de
-regreso a la página del repositorio GitHub, puede ver la lista de los
-cambios confirmados (commits) ahí, así como la visualización del
-documento generado a partir del archivo README.md.
-
-<img src="images/6.12_sasap-test-displayed.png" alt="Captura de pantalla con la interfase web los cambios corfimados (commits) y de la visualización de la página README.md." width="100%" />
-<p class="caption">
-Captura de pantalla con la interfase web los cambios corfimados
-(commits) y de la visualización de la página README.md.
-</p>
-
-Expliquemos algunas cosas sobre esta ventana. Representa una vista del
-repositorio que acaba de crear, hasta ahora mostrando todos sus
-archivos. Para cada archivo, muestra la fecha de la última modificación
-y el mensaje asociado al *commit* que se utilizó para describir los
-cambios realizados. Esta es la razón por qué es tan importante escribir
-buenos mensajes, que contengan información relevante cuando se hace el
-*commit*. Además, el título azul sobre el listado de archivos muestra el
-*commit* más reciente, con su mensaje asociado y su identificados SHA.
-Ese identificador SHA es la clave para el set de versiones. Si hace clic
-en el identificador SHA (*810f314*), va a mostrar los cambios que se
-hicieron en ese *commit* en particular.
-
-En la siguiente sección vamos a usar el URL de GitHub del repositorio
-que acaba de crear y lo usaremos plara clonarlo (`clone`) a un
-repositorio en nuestra máquina local y así editar los archivos con
-RStudio. Para eso, primero tenemos que copiar el URL de GitHub, que
-representa la dirección del repositorio:
-
-<img src="images/6.13_sasap-test-clone-url.png" alt="Captura de pantalla para clonar un repositorio GitHub." width="100%" />
-<p class="caption">
-Captura de pantalla para clonar un repositorio GitHub.
-</p>
-
-## Trabajando localmente con Git en RStudio
-
-RStudio incluye soporte para Git como sistema de control de versiones,
-pero esto **sólo** ocurre si estamos trabajando en un *Proyecto de
-RStudio* (RStudio project folder). En esta sección vamos a clonar el
-repositorio que se creó en GitHub y lo vamos a dejar un repositorio
-local de un proyecto de RStudio.
-
-Esto es lo que vamos a hacer:
-
-1.  Crear un proyecto nuevo.
-2.  Inspeccionar el panel Git y el historial de versiones.
-3.  Confirmar una modificación (commit) al archivo README.md.
-4.  Commit las modificaciones que hicieron en RStudio.
-5.  Inspeccionar el historial de versiones.
-6.  Crear y commit un archivo Rmd.
-7.  Enviar (*Push*) estos cambios a GitHub.
-8.  Ver el historial de cambios en GitHub.
-
-### Crear nuevo Proyecto (Create a New Project)
-
-Comience creando un *New Project…* en RStudio, seleccione la opción
-*Version Control* y pegue el URL de GitHub que copió en el espacio para
-repositorio remoto (*Repository URL*). Si bien usted puede darle el
-nombre que quiera al repositorio local, se usa típicamente el mismo
-nombre que el que se tiene en GitHub, de esta forma se mantiene un grado
-de correspondencia. Usted puede elegir cualquier directorio para su
-copia local, en mi caso use el directorio `development`
-(fig. @ref(fig:githubClone)).
-
-<img src="images/6.14_rstudio-clone-repo.png" alt="Captura de pantalla para la creasción de un proyecto de RStudio clonando un repositorio remoto." width="100%" />
-<p class="caption">
-Captura de pantalla para la creasción de un proyecto de RStudio clonando
-un repositorio remoto.
-</p>
-
-Un vez que haga clic en `Create Project` (crear proyecto), una nueva
-página de RStudio se abrirá con todos los archivos copiados localmente
-desde el repositorio remoto. Dependiendo de como esté configurada la
-versión de RStudio, la posición y tamaño de los paneles puede cambiar,
-pero generalmente todos van a estar presentes, incluyendo los paneles
-*Git* y el listado de archivos (*Files*) que fueron creados en el
-repositorio remoto.
-
-<img src="images/6.15_rstudio-sasap-test.png" alt="Captura de pantalla de la interfase del projecto de RStudio con el clon local de repositorio." width="100%" />
-<p class="caption">
-Captura de pantalla de la interfase del projecto de RStudio con el clon
-local de repositorio.
-</p>
-
-En la figura @ref(fig:githubCloneLocal) puede ver que apareció un
-archivo llamado `sasap-test.Rproj` y que están los otros 3 archivos que
-se crearon con el repositorio remoto de GitHub (`.gitignore`, `LICENSE`
-y `README.md`).
-
-En el panel *Git* en RStudio se pueden ver 2 archivos. Este es el panel
-de estatus donde se se muestran todos los archivos del repositorio en
-los cuales se han realizado modificaciones. En este caso, el archivo
-`.gitignore` se muestra con una *M* que significa *Modificado* y
-`sasap-test.Rproj` con un *? ?* para indicar que este archivo no está
-siendo monitoreado. Esto significa que git no tiene registro de ninguna
-version para este archivo y que no sabe nada acerca de el. A medida que
-usted vaya tomando decisiones sobre el control de versiones en RStudio,
-estos iconos van a ir cambiando para reflejar el estatus de la versión
-actual de cada uno de los archivos.
-
-### Inspeccionar el historial (history)
-
-A continuación vamos a hacer clic en el botón *History* (historial, es
-el reloj que aparece en la primera fila al interior del panel ed Git),
-esto despliega una ventana con el registro de los cambios que se han
-realizado y, en este caso, deben ser idénticos a lo que usted vio en
-GitHub. Al hacer clic en cada fila del historial, podrá ir viendo
-exactamente que fue agregado y cambiado en cada uno de los commits en
-este repositorio.
-
-<img src="images/6.16_rstudio-history-1.png" alt="Historial de los cambios realizados en el repositorio local." width="100%" />
-<p class="caption">
-Historial de los cambios realizados en el repositorio local.
-</p>
-
-### Confirme cambios haciendo clic en *commit* al archivo README.md (Commit a README.md change)
-
-Ahora hagamos algunos cambios al archivo README.md en RStudio. Agregue
-una sección nueva con un block de *markdown* como este:
-
-<pre><code>
-
 ## Git desde RStudio
 
-Desde la interfase de RStudio, es posible hacer las mismas acciones con el sistema de versiones que se hicieron en  GitHub
-y mucho más. Además en RStudio se tienen las ventajas propias de programar en un IDE con completación de comandos y otras
-características que hacen nuestro trabajo más fácil.
+Desde la interfase de RStudio, es posible hacer las mismas acciones con
+el sistema de versiones que se hicieron en GitHub y mucho más. Además en
+RStudio se tienen las ventajas propias de programar en un IDE con
+completación de comandos y otras características que hacen nuestro
+trabajo más fácil.
 
-- Agregar archivos al control de versiones
-- Ccommit cambios
-- Push commits a GitHub
+-   Agregar archivos al control de versiones
+-   Ccommit cambios
+-   Push commits a GitHub
 
-</code></pre>
+</code>
+</pre>
 
 Una vez que los haya guardado, podrá ver en forma inmediata el archivo
 *README.md* en el panel Git (fig. @ref(fig:rstudioPanelStatus)), marcado
